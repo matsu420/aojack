@@ -3,7 +3,6 @@ import websocket
 import json
 
 
-
 class AOJ:
     extension = {
             'c': 'C',
@@ -54,7 +53,7 @@ class AOJ:
             while True:
                 submit_result = json.loads(ws.recv())
                 if submit_result['userID'] == self.userID and submit_result['status'] != 5 and submit_result['status'] != 9:
-                    print AOJ.status_code_str[submit_result['status']
+                    print AOJ.status_code_str[submit_result['status']]
                     break
 
 
@@ -73,7 +72,4 @@ def main():
     aoj = AOJ("userid", "password")
 
     aoj.submit_file('hello.py', 'A', lessonID = 'ITP1_1')
-
-if __name__ == '__main__':
-    main()
 
