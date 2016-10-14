@@ -49,27 +49,32 @@ class AOJ:
 
         res = requests.post('http://judge.u-aizu.ac.jp/onlinejudge/webservice/submit', data = data)
 
-        if live:
+        if "UserID or Password is Wrong." in res.text:
+            print "UserID or Password is Wrong"
+        elif "Invalid problem" in res.text:
+            print "Invalid problem"
+        elif live:
             while True:
                 submit_result = json.loads(ws.recv())
+                print submit_result
                 if submit_result['userID'] == self.userID and submit_result['status'] != 5 and submit_result['status'] != 9:
+                    print submit_result['problemTitle'] + ': ', 
                     print AOJ.status_code_str[submit_result['status']]
                     break
 
 
     def submit_file(self, path, problemNO, lessonID = "", live = True):
         sourceCode = ""
-        with open(path, "r") as f:
-            sourceCode = f.read()
+        try:
+            with open(path, "r") as f:
+                sourceCode = f.read()
+        except IOError:
+            print "No such file or directory: " + path
+        except:
+            raise
+        else:
+            ex_index = path.rfind('.') + 1
+            language = AOJ.extension[path[ex_index: ]]
 
-        ex_index = path.rfind('.') + 1
-        language = AOJ.extension[path[ex_index: ]]
-
-        self.submit(problemNO, language, sourceCode, lessonID, live)
-
-
-def main():
-    aoj = AOJ("userid", "password")
-
-    aoj.submit_file('hello.py', 'A', lessonID = 'ITP1_1')
+            self.submit(problemNO, language, sourceCode, lessonID, live)
 

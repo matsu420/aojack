@@ -1,8 +1,8 @@
 import argparse
 import sys
+import traceback
 
 import config
-
 import aoj
 
 def aojack():
@@ -21,10 +21,13 @@ def aojack():
 
     aoj_session = aoj.AOJ(config.USERID, config.PASSWORD)
 
-    sys.exit(0)
+    try:
 
-    if args.func == 'submit_file':
-        aoj_session.submit_file(args.path, args.problemNO, args.lessonID, not args.liveoff)
+        if args.func == 'submit_file':
+            aoj_session.submit_file(args.path, args.problemNO, args.lessonID, not args.liveoff)
+    except:
+        print traceback.format_exc()
+
 
 
 if __name__ == "__main__":
