@@ -1,6 +1,7 @@
 import argparse
 import sys
 
+import config
 import aoj
 
 def aojack():
@@ -17,11 +18,7 @@ def aojack():
 
     args = parser.parse_args(sys.argv[1:])
 
-    print args
-
-    aoj_session = aoj.AOJ('userID', 'password')
-
-    sys.exit(0)
+    aoj_session = aoj.AOJ(config.USERID, config.PASSWORD)
 
     if args.func == 'submit_file':
         aoj_session.submit_file(args.path, args.problemNO, args.lessonID, not args.liveoff)
