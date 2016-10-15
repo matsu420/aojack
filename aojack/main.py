@@ -1,9 +1,11 @@
+#!/usr/bin/env python
+
 import argparse
 import sys
 import traceback
 
-import config
-import aoj
+from aojack import aoj
+from aojack import config
 
 def aojack():
     parser = argparse.ArgumentParser()
@@ -27,7 +29,6 @@ def aojack():
             aoj_session.submit_file(args.path, args.problemNO, args.lessonID, not args.liveoff)
     except:
         print traceback.format_exc()
-
 
 
 if __name__ == "__main__":
