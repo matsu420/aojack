@@ -1,6 +1,7 @@
 import requests
 import websocket
 import json
+import re
 
 
 class AOJ:
@@ -26,9 +27,49 @@ class AOJ:
             "Judge Not Available",
             ]
 
+    testcase_pat = re.compile('http://analytic.u-aizu.ac.jp:8080/aoj/testcase.jsp\?id=[a-zA-Z0-9_]+&case=')
     def __init__(self, userID, password):
         self.userID = userID
         self.password = password
+
+    def get_file(self, runID, case, in_file = False, out_file = False):
+        url = "http://judge.u-aizu.ac.jp/onlinejudge/review.jsp?rid="
+        url += runID
+
+        res = requests.get(url)
+
+        url = AOJ.testcase_pat.search(res.text).group()
+
+        url += case
+        url += "&type="
+
+        if not url is None:
+            try:
+                if in_file:
+                    with open(runID + '_in.txt', 'w') as f:
+                        res = requests.get(url + 'in')
+                        f.write(res.text.encode('utf-8'))
+            except IOError:
+                print "Failed to write input"
+            except requests.exceptions.ConnectionError:
+                print "Failed to download input"
+            except:
+                raise
+
+            try:
+                if out_file:
+                    with open(runID + '_out.txt', 'w') as f:
+                        res = requests.get(url + 'out')
+                        f.write(res.text.encode('utf-8'))
+            except IOError:
+                print "Failed to write output"
+            except requests.exceptions.ConnectionError:
+                print "Failed to download output"
+            except:
+                raise
+
+        else:
+            print "Failed to access runID status"
 
 
     def submit(self, problemNO, language, sourceCode, lessonID = "", live = True):
