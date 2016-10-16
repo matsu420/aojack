@@ -98,6 +98,7 @@ class AOJ:
             while True:
                 submit_result = json.loads(ws.recv())
                 if submit_result['userID'] == self.userID and submit_result['status'] != 5 and submit_result['status'] != 9:
+                    print 'RunID:' + str(submit_result['runID'])
                     print submit_result['problemTitle'] + ': ', 
                     print AOJ.status_code_str[submit_result['status']]
                     break
